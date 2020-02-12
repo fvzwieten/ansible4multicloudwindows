@@ -1,12 +1,3 @@
-# This playbook will create a VM in Azure
-# Inputs:
-# - vm_name: the name part of the fqdn
-# - os_type: linux or windows
-# - role: The role for this server. This is needed to open firewall ports in Azure (not in the VM itself)
-#         it is also used to tag the VM so the VM will end up in the correct group when doing dynamic inventory
-# Note: it needs to have a machine credential that will be used to give the VM it's initial credentials. This
-#       machine credential needs to be of type username/password
-
 ---
 - name: Retrieve admin credentials for Windows
   hosts: localhost
@@ -20,18 +11,11 @@
 
   # the name of this playbook. You see this back in the default logging
 - name: Azure Create VM
-
-  # There is no concepts of hosts in a public cloud. We use localhost to specify that this playbook runs from the
-  # Ansible execution host (engine or tower).
   hosts: localhost
-  
-  # likewise, since we use the Azure API, there is no concept of a connection. Thus we specify local
   connection: local
-  
-  # this is a way to specify files that contain vars
-  vars_files:
+  #vars_files:
     # here we include a var file from a sub directory "files"
-  - files/azure_vars
+  #- files/azure_vars
   
   # this is to specify vars as part of this playbook
   vars:
@@ -61,30 +45,13 @@
   - name: Define OS type specific vars
   
     # An example of including a file whos name is dynamic
-    include_vars: "files/azure_vm_{{ os_type | lower }}_vars"
-
-  # Example of changing the value of a var depending on some condition
-  - name: Make sure os_type is linux for load balancer role
-    set_fact:
-      os_type: "linux"
-    when: role=="lbserver"
-
-  - name: Make sure os_type is windows for domain controller role
-    set_fact:
-      os_type: "windows"
-    when: role=="dcserver"
+    include_vars: "files/azure_vm_windows_vars"
 
   # construct a var from multiple other vars
   - name: Define Role specific ports
     set_fact:
       arm_ports: "{{ arm_ports }},{{ ports[role] }}"
       
-  # Example of logging output. Here is only runs when the verbosity level is 1
-  - name: Report on ports that will be opened
-    debug:
-      msg: "Ports to open: {{ arm_ports }}"
-      verbosity: 1
-
   # the retry logic of the following 3 tasks is that if this playbook is
   # run multiple times concurrently azure will try to create these objects
   # at exactly the same time because the present state is not there for all
@@ -131,7 +98,7 @@
     azure_rm_virtualmachine:
       admin_username: "{{ hostvars['instance'].admin_username }}"
       admin_password: "{{ hostvars['instance'].admin_password }}"
-      os_type: '{{ os_type }}'
+      os_type: 'windows'
       image:
         offer: '{{ arm_offer }}'
         publisher: '{{ arm_publisher }}'
@@ -146,8 +113,7 @@
       subnet_name: '{{ azure_subnet }}'
       tags:
           role: '{{ role }}'
-          #guid: '{{ guid }}'
-
+ 
   # Because Ansible needs winrm we must add it
   - name: Create Azure vm extension to enable HTTPS WinRM listener
     azure_rm_virtualmachineextension:
@@ -159,16 +125,14 @@
       type_handler_version: "1.9"
       settings: '{"commandToExecute": "powershell.exe -ExecutionPolicy ByPass {{winrm_enable_script}}"}'
       auto_upgrade_minor_version: true
-    when: os_type == "Windows"
-
+ 
   # Example of a way to wait before a resource comes online. Can also work with files on a machine.
   - name: Wait for the WinRM port to come online
     wait_for:
       port: 5986
       host: '{{azure_vm.properties.networkProfile.networkInterfaces[0].properties.ipConfigurations[0].properties.publicIPAddress.properties.ipAddress}}'
       timeout: 600
-    when: os_type == "Windows"
-
+ 
   # Get a fact from azure itself
   - name: Get Public IP
     azure_rm_publicipaddress_facts:
