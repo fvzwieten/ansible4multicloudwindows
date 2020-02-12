@@ -1,0 +1,119 @@
+---
+- name: Retrieve admin credentials for Windows
+  hosts: localhost
+  gather_facts: no
+  tasks:
+  - name: add instance host with machine credential in inventory
+    add_host:
+      name: "instance"
+      admin_username: "{{ansible_user}}"
+      admin_password: "{{ansible_password}}"
+
+- name: aws_create_vm
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  vars_files:
+  - files/aws_vars
+
+  tasks:
+  - name: create an ec2 key pair
+    ec2_key:
+      aws_access_key: "{{ aws_access_key_id }}"
+      aws_secret_key: "{{ aws_secret_access_key }}"
+      region: "{{ aws_region }}"
+      name: "{{ vm_name }}"
+    register: ec2key
+    
+  - name: Set up Security Group
+    ec2_group:
+      name: "mysecgrp"
+      description: sg with rule descriptions
+      aws_access_key: "{{ aws_access_key_id }}"
+      aws_secret_key: "{{ aws_secret_access_key }}"
+      region: "{{ aws_region }}"
+      rules:
+      - proto: tcp
+        ports:
+        - 5986
+        cidr_ip: 0.0.0.0/0
+        rule_desc: allow all on WinRM-HTTPS
+      - proto: tcp
+        ports:
+        - 3389
+        cidr_ip: 0.0.0.0/0
+        rule_desc: allow all on RDP
+ 
+  - name: Provision an instance
+    ec2:
+      aws_access_key: "{{ aws_access_key_id }}"
+      aws_secret_key: "{{ aws_secret_access_key }}"
+      key_name: "{{ vm_name }}"
+      id: "{{ vm_name }}"
+      instance_type: t2.micro
+      image: "ami-0182e552fba672768"
+      region: "{{ aws_region }}"
+      group: "mysecgrp"
+      wait: true
+      instance_tags:
+        Name: "{{ vm_name }}"
+        role: "{{ role }}"
+      user_data: "{{ lookup('file', 'files/sysprep') }}"
+    register: ec2
+      
+  - name: Retrieve administrator password
+    ec2_win_password:
+      aws_access_key: "{{ aws_access_key_id }}"
+      aws_secret_key: "{{ aws_secret_access_key }}"
+      instance_id: "{{ ec2.instance_ids[0] }}"
+      region: "{{ aws_region }}"
+      key_data: "{{ ec2key.key.private_key }}"
+      wait: true
+      wait_timeout: 300
+    register: win_pwd
+
+  - name: delete the ec2 key pair
+    ec2_key:
+      aws_access_key: "{{ aws_access_key_id }}"
+      aws_secret_key: "{{ aws_secret_access_key }}"
+      region: "{{ aws_region }}"
+      name: "{{ vm_name }}"
+      state: absent
+      
+
+  - name: add instance to inventory
+    add_host:
+      name: "{{ ec2.instances[0].public_ip }}"
+      groups:
+      - just_created
+      user: "Administrator"
+      pwd: "{{ win_pwd.win_password }}"
+      public_ip: "{{ ec2.instances[0].public_ip }}"
+
+
+- name: add ansible machine credential to instance
+  hosts: just_created
+  gather_facts: no
+  vars_files:
+  - files/winrm_vars
+  vars:
+    ansible_user: "{{ user }}"
+    ansible_password: "{{ pwd }}"
+
+  tasks:
+  - name: make sure the instance is ready
+    wait_for_connection:
+
+  - name: add windows admin account for ansible
+    win_user:
+      name: '{{ hostvars["instance"].admin_username }}'
+      password: '{{ hostvars["instance"].admin_password }}'
+      state: present
+      groups:
+      - Administrators
+
+  # Use a debug statement to report on stuff in the logging
+  - name: Report endpoints
+    debug:
+      msg: "VM name: {{ vm_name }} Role: {{ role }} Public IP: {{ public_ip }}"
+
