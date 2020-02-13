@@ -4,7 +4,7 @@
   gather_facts: yes
   
   vars_files:
-  - winrm_vars
+  - files/winrm_vars
   
   vars:
     factpath: "C:\\Ansible\\CustomFacts"
