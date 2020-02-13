@@ -1,6 +1,6 @@
 - name: test gcp_compute_windows_pwd
   hosts: localhost
-  #connection: local
+  connection: local
   vars_files:
   - files/gcp_vars
 
