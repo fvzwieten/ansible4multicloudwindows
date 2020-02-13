@@ -6,7 +6,7 @@
 
   tasks:
   - name: get cred file
-    fetch:
+    copy:
       src: files/gcp-serviceaccount.json
       dest: files/gcp-cred.json
     
