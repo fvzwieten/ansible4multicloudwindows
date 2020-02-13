@@ -7,8 +7,8 @@
   tasks:
   - name: get cred file
     fetch:
-      src: /tmp/gcp-serviceaccount.json
-      dest: files/
+      src: files/gcp-serviceaccount.json
+      dest: files/gcp-cred.json
     
 #  - name: show content file
 #    debug: var=item
@@ -21,7 +21,7 @@
       zone: "{{ gcp_zone }}"
       project: "{{ gcp_project }}"
       email: "{{ gcp_email }}"
-      credential_file: "files/gcp-serviceaccount.json"
+      credential_file: "files/gcp-cred.json"
       username: "ansible"
     register: testout
 
