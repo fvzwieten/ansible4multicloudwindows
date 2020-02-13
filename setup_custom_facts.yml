@@ -1,20 +1,15 @@
 ---
 - name: Define and Load in the custom facts
   hosts: all
-  gather_facts: yes
+  gather_facts: no
   
   vars_files:
   - files/winrm_vars
   
-  vars:
-    factpath: "C:\\Ansible\\CustomFacts"
-
   tasks:
-    - name: create custom fact directory
-      #meta: clear_facts
-      win_file:
-        path: "{{ factpath }}"
-        state: directory
+    - name: set a custom fact for the role
+      set_fact:
+        role: "{{ role }}"
 
     #- name: set up custom facts
     #  win_template:
@@ -23,4 +18,3 @@
 
     - name: reload facts
       setup:
-    #    fact_path: "{{ factpath }}"
