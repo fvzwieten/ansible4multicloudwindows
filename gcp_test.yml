@@ -13,7 +13,7 @@
   - name: show content file
     debug: var=item
     with_file:
-    - "/tmp/gcp-cred.json"
+    - "files/gcp-cred.json"
   
   - name: run the new module
     gcp_compute_win_password:
