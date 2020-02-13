@@ -16,6 +16,9 @@
       admin_username: "{{ansible_user}}"
       admin_password: "{{ansible_password}}"
 
+# ============================================================= PLAY =====================================================
+# switch to connection local to do AWS stuff
+
 - name: gcp_create_vm
   hosts: localhost
   connection: local
@@ -110,18 +113,21 @@
   - name: add instance to inventory
     add_host:
       name: '{{ public_ip.address }}'
-      groups:
-      - just_created
+      groups: "just_created"
       user: "{{ win_pwd.username }}"
       pwd: "{{ win_pwd.password }}"
       public_ip: "{{ public_ip.address }}"
 
 # ============================================================= PLAY =====================================================
+# switch to inventory just_created and create/change the ansible user with the correct password from the machine credential
+
 - name: add ansible machine credential to instance
   hosts: just_created
   gather_facts: no
+
   vars_files:
   - files/winrm_vars
+
   vars:
     ansible_user: "{{ user }}"
     ansible_password: "{{ pwd }}"
