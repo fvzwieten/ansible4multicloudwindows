@@ -16,7 +16,7 @@
       zone: "{{ gcp_zone }}"
       project: "{{ gcp_project }}"
       email: "{{ gcp_email }}"
-      credential_file: "files/gcp-cred.json"
+      credential_file: "/tmp/gcp-serviceaccount.json"
       username: "ansible"
     register: testout
 
