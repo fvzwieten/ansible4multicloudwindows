@@ -14,7 +14,7 @@
     - name: set up custom facts
       template:
         src: facts.ps1
-        dest: ""{{ fact_path }}"
+        dest: "{{ fact_path }}"
 
     - name: reload facts
       setup:
