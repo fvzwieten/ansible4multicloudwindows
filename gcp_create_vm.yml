@@ -27,7 +27,7 @@
       state: present
     register: public_ip
 
-  - name: create a firewall
+  - name: Allow access through WinRM
     gcp_compute_firewall:
       name: nasible-allow-WinRM
       project: "{{ gcp_project }}"
