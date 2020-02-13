@@ -1,7 +1,6 @@
 ---
 - name: Define and Load in the custom facts
   hosts: all
-  meta: clear_facts
   gather_facts: yes
   
   vars_files:
@@ -12,15 +11,16 @@
 
   tasks:
     - name: create custom fact directory
+      #meta: clear_facts
       win_file:
         path: "{{ factpath }}"
         state: directory
 
-    - name: set up custom facts
-      win_template:
-        src: facts.ps1.j2
-        dest: "{{ factpath }}\\facts.ps1"
+    #- name: set up custom facts
+    #  win_template:
+    #    src: facts.ps1.j2
+    #    dest: "{{ factpath }}\\facts.ps1"
 
     - name: reload facts
       setup:
-        fact_path: "{{ factpath }}"
+    #    fact_path: "{{ factpath }}"
