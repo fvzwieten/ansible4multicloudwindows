@@ -3,7 +3,7 @@
   hosts: all
   gather_facts: yes
   vars:
-    fact_path: "C:\Ansible\CustomFacts"
+    fact_path: "C:\\Ansible\\CustomFacts"
 
   tasks:
     - name: create custom fact directory
