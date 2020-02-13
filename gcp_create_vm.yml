@@ -15,14 +15,7 @@
   gather_facts: no
   vars_files:
   - files/gcp_vars
-
-  vars:
-    ports:
-      webserver: "80,443"
-      dbserver: "3306"
-      dcserver: "389,636,3268,3269,88,53,445,135,123,464,138,9389,139"
-
-    role_ports: "{{ ports[role] }}"
+  - files/role_vars
 
   tasks:
   - name: create a public ip
