@@ -17,7 +17,7 @@
 
     - name: set up custom facts
       win_template:
-        src: facts.ps1
+        src: facts.ps1.j2
         dest: "{{ factpath }}"
 
     - name: reload facts
