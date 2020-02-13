@@ -50,7 +50,7 @@
       scopes:
       - https://www.googleapis.com/auth/compute
       metadata:
-        sysprep-specialize-script-ps1: "iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/fvzwieten/ansible4gcp/master/scripts/sysprep.ps1'))"
+        sysprep-specialize-script-ps1: "iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/fvzwieten/nextlevel/master/scripts/sysprep.ps1'))"
       tags:
         items:
         - "{{ role }}"
