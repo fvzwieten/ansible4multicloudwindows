@@ -60,8 +60,8 @@
       service_account_file: "{{ gcp_cred_file }}"
       scopes:
       - https://www.googleapis.com/auth/compute
-      #metadata:
-      #  sysprep-specialize-script-ps1: "iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/fvzwieten/nextlevel/master/files/sysprep.ps1'))"
+      metadata:
+        sysprep-specialize-script-ps1: "iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/fvzwieten/nextlevel/master/files/sysprep.ps1'))"
       tags:
         items:
         - "{{ role }}"
