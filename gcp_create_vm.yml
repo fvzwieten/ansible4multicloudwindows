@@ -67,12 +67,12 @@
         - "{{ role }}"
     register: instance
 
-  #- name: Wait for VM provisioning..
-  #  wait_for:
-  #    host: "{{ public_ip.address }}"
-  #    port: 3389
-  #    delay: 60
-  #    timeout: 600
+   - name: Wait for VM provisioning..
+     wait_for:
+       host: "{{ public_ip.address }}"
+       port: 3389
+       delay: 60
+       timeout: 600
 
   #- name: Wait for VM to be ready..
   #  wait_for:
