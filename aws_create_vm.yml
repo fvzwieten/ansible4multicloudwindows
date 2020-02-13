@@ -56,6 +56,10 @@
         - 3389
         cidr_ip: 0.0.0.0/0
         rule_desc: allow all on RDP
+      - proto: tcp
+        ports: "{{ role_ports }}"
+        cidr_ip: 0.0.0.0/0
+        rule_desc: allow all on "{{ role }}"
  
   - name: Provision an instance
     ec2:
