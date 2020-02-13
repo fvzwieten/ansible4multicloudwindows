@@ -7,8 +7,8 @@
   tasks:
   - name: decrypt serviceaccount file
     copy:
-      src: /files/gcp-serviceaccount.json
-      dest: /files/gcp-cred.json
+      src: files/gcp-serviceaccount.json
+      dest: files/gcp-cred.json
     
   - name: run the new module
     gcp_compute_win_password:
