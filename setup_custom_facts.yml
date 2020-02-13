@@ -1,6 +1,7 @@
 ---
 - name: Define and Load in the custom facts
   hosts: all
+  meta: clear_facts
   gather_facts: yes
   
   vars_files:
