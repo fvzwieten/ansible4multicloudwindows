@@ -2,7 +2,8 @@
 - name: Define and Load in the custom facts
   hosts: all
   gather_facts: yes
-  var_files:
+  
+  vars_files:
   - winrm_vars
   
   vars:
