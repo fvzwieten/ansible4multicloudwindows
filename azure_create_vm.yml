@@ -98,7 +98,7 @@
     azure_rm_virtualmachine:
       admin_username: "{{ hostvars['instance'].admin_username }}"
       admin_password: "{{ hostvars['instance'].admin_password }}"
-      os_type: 'windows'
+      os_type: 'Windows'
       image:
         offer: '{{ arm_offer }}'
         publisher: '{{ arm_publisher }}'
