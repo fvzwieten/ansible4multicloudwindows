@@ -1,0 +1,20 @@
+- name: test gcp_compute_windows_pwd
+  hosts: localhost
+  connection: local
+  vars_files:
+  - files/gcp_vars
+
+  tasks:
+  - name: run the new module
+    gcp_compute_win_password:
+      instance: "{{ vm_name }}"
+      zone: "{{ gcp_zone }}"
+      project: "{{ gcp_project }}"
+      email: "{{ gcp_email }}"
+      credential_file: "files/gcp-serviceaccount.json"
+      username: "ansible"
+    register: testout
+
+  - name: dump test output
+    debug:
+      msg: "{{ testout }}"
