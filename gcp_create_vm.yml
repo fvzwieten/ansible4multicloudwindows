@@ -13,8 +13,8 @@
   hosts: localhost
   connection: local
   gather_facts: no
-  vars_files:
-  - files/gcp_vars
+#  vars_files:
+#  - files/gcp_vars
 
   tasks:
   - name: create a public ip
