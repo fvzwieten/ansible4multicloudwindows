@@ -81,6 +81,11 @@
   #    delay: 60
   #    timeout: 600
 
+  - name: get cred file
+    copy:
+      src: files/gcp-serviceaccount.json
+      dest: files/gcp-cred.json
+
   - name: Retrieve administrator password
     gcp_compute_win_password:
       instance: "{{ vm_name }}"
