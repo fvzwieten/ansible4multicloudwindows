@@ -87,7 +87,7 @@
       zone: "{{ gcp_zone }}"
       project: "{{ gcp_project }}"
       email: "{{ gcp_email }}"
-      credential_file: "files/gcp-serviceaccount.json"
+      credential_file: "/tmp/gcp-serviceaccount.json"
       username: '{{ hostvars["instance"].admin_username }}'
     register: win_pwd
 
