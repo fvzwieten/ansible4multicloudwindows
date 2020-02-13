@@ -6,6 +6,7 @@
 # store the machine credentials as inventory vars
 # these can then be retrieved across plays in this
 # playbook.
+
 - name: Retrieve admin credentials for Windows
   hosts: localhost
   gather_facts: no
@@ -16,12 +17,17 @@
       admin_username: "{{ansible_user}}"
       admin_password: "{{ansible_password}}"
 
+
+# ============================================================= PLAY =====================================================
+# switch to connection local to do AWS stuff
+
 - name: aws_create_vm
   hosts: localhost
   connection: local
   gather_facts: no
   vars_files:
   - files/aws_vars
+  - files/role_vars
 
   tasks:
   - name: create an ec2 key pair
@@ -87,16 +93,16 @@
       name: "{{ vm_name }}"
       state: absent
       
-
   - name: add instance to inventory
     add_host:
       name: "{{ ec2.instances[0].public_ip }}"
-      groups:
-      - just_created
+      groups: "just_created"
       user: "Administrator"
       pwd: "{{ win_pwd.win_password }}"
       public_ip: "{{ ec2.instances[0].public_ip }}"
 
+# ============================================================= PLAY =====================================================
+# switch to inventory just_created and create/change the ansible user with the correct password from the machine credential
 
 - name: add ansible machine credential to instance
   hosts: just_created
