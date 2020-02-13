@@ -36,7 +36,7 @@
       allowed:
       - ip_protocol: tcp
         ports:
-        - '5989'
+        - '5986'
 
   - name: create a VM
     gcp_compute_instance:
