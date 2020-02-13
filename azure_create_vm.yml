@@ -25,15 +25,11 @@
   hosts: localhost
   connection: local
   
+  var_files:
+  - files/role_vars
+
   vars:
     winrm_enable_script: "Invoke-Expression -Command ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/ansible/ansible/devel/examples/scripts/ConfigureRemotingForAnsible.ps1')); Enable-WSManCredSSP -Role Server -Force"
-
-    ports:
-      webserver: "80"
-      dbserver: "3306"
-      dcserver: "389,636,3268,3269,88,53,445,135,123,464,138,9389,139"
-
-    role_ports: "{{ ports[role] }}"
 
     azure_resource_group: "ansible_workshop"
     azure_virtual_network: "vn_{{ azure_resource_group }}_01"
