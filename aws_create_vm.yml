@@ -1,11 +1,18 @@
 ---
+# ============================================================= PLAY =====================================================
+# run this on localhost without connection local
+# to get access to the tower machine credential data
+# create a dummy host in the in memory inventory and
+# store the machine credentials as inventory vars
+# these can then be retrieved across plays in this
+# playbook.
 - name: Retrieve admin credentials for Windows
   hosts: localhost
   gather_facts: no
   tasks:
-  - name: add instance host with machine credential in inventory
+  - name: add dummy host with machine credential in inventory
     add_host:
-      name: "instance"
+      name: "dummy"
       admin_username: "{{ansible_user}}"
       admin_password: "{{ansible_password}}"
 
@@ -106,8 +113,8 @@
 
   - name: add windows admin account for ansible
     win_user:
-      name: '{{ hostvars["instance"].admin_username }}'
-      password: '{{ hostvars["instance"].admin_password }}'
+      name: '{{ hostvars["dummy"].admin_username }}'
+      password: '{{ hostvars["dummy"].admin_password }}'
       state: present
       groups:
       - Administrators
