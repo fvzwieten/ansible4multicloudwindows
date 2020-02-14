@@ -85,7 +85,7 @@
       group: "ansible,{{ role }}"
       wait: true
       instance_tags:
-        Name: "{{ vm_name }}"
+        Name: "aws_{{ vm_name }}"
         role: "{{ role }}"
       user_data: "{{ lookup('file', 'files/sysprep') }}"
     register: ec2
