@@ -70,7 +70,7 @@
         - 80
         - 443
         cidr_ip: 0.0.0.0/0
-        rule_desc: allow all on HTTP and HTTPS"
+        rule_desc: allow all on HTTP and HTTPS
     when: role=="webserver"
 
   - name: Provision an instance
