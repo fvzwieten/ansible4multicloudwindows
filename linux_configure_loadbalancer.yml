@@ -1,6 +1,6 @@
 ---
 - name: create loadbalancer setup
-  hosts: webservers
+  hosts: webservers:loadbalancers
   vars_files:
     files/winrm_vars
     
@@ -13,13 +13,22 @@
     set_fact:
         backend_server_list: "{{ backend_server_list + [ {'name': item, 'address': '{{ ansible_ssh_host }}' + ':80'}] }}"
     loop: "{{ groups['webservers'] }}"
-      
-  - name: show server_list
-    debug:
-      var: backend_server_list
-
+    
   tasks:
-  - name: show server_list
-    debug:
-      var: backend_server_list
-  
+  - include_role:
+      name: geerlingguy.haproxy
+    vars:
+      haproxy_backend_servers: "{{ backend_server_list }}"
+    when: "ansible_fqdn == 'loadbalancer.ibm.nontoonyt.com'"
+
+  post_tasks:
+  - name: add cloud servers to pool
+    haproxy:
+      state: enabled
+      host: " {{ ansible_host }}"
+      socket: /var/lib/haproxy/stats
+      weight: 10
+      backend: habackend
+    delegate_to: loadbalancer.ibm.nontoonyt.com
+    when: "ansible_fqdn != 'loadbalancer.ibm.nontoonyt.com'"  
+ 
