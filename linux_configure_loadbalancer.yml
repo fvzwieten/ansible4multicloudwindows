@@ -12,7 +12,7 @@
   - name: populate loadbalancer list of dictionaries
     set_fact:
         backend_server_list: "{{ backend_server_list + [ {'name': item, 'address': hostvars[item]['ansible_local']['facts']['external_ip'] + ':80'}] }}"
-    loop: "{{ query('inventory_hostnames') }}"
+    loop: "{{ groups['webservers'] }}"
       
   - name: show server_list
     debug:
