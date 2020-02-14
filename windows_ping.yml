@@ -1,0 +1,14 @@
+
+---
+- name: ping the webservers servers
+  hosts: webservers
+  gather_facts: no
+  vars_files:
+    files/winrm_vars
+
+  tasks:
+  - name: Wait up to 600 seconds for target connection to become reachable/usable
+    wait_for_connection:
+      
+  - name: ping it
+    win_ping:
