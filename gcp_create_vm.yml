@@ -102,7 +102,7 @@
 
   - name: Retrieve administrator password
     gcp_compute_win_password:
-      instance: "gcp_{{ vm_name }}"
+      instance: "gcp-{{ vm_name }}"
       zone: "{{ gcp_zone }}"
       project: "{{ gcp_project }}"
       email: "{{ gcp_email }}"
@@ -147,4 +147,4 @@
   # Use a debug statement to report on stuff in the logging
   - name: Report endpoints
     debug:
-      msg: "VM name: gcp_{{ vm_name }} Role: {{ role }} Public IP: {{ public_ip }}"
+      msg: "VM name: gcp-{{ vm_name }} Role: {{ role }} Public IP: {{ public_ip }}"
