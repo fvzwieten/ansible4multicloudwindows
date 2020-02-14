@@ -68,11 +68,4 @@
     <div class="text">Deployed using Red Hat Ansible Tower</div>
     <div class="text">My public ip is: {{ ansible_ssh_host }}</div>
 </body>
-
-<script>
-    $.get('http://api.ipify.org', function (responseText) {
-        $('#ipaddress').html(responseText);
-    });
-</script>
-
 </html>
