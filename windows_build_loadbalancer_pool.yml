@@ -8,13 +8,11 @@
   - name: create empty list for collection of backend servers
     set_fact:
       backend_server_list: []
-    run_once: true
 
   - name: populate loadbalancer list of dictionaries
     set_fact:
         backend_server_list: "{{ backend_server_list + [ {'name': item, 'address': '{{ ansible_ssh_host }}' + ':80'}] }}"
     loop: "{{ groups['webservers'] }}"
-    run_one: true
 
   - name: store the resulting pool for the next play
     set_stats:
