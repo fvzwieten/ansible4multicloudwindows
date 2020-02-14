@@ -1,8 +1,8 @@
 ---
 - name: create loadbalancer setup
-  hosts: loadbalancers
-#  vars_files:
-#    files/winrm_vars
+  hosts: webservers
+  vars_files:
+    files/winrm_vars
     
   tasks:
   - name: create empty list for collection of backend servers
