@@ -2,8 +2,8 @@
 - name: create loadbalancer setup
   hosts: webservers
   vars_files:
-  - files/winrm_vars
-
+    files/winrm_vars
+    
   pre_tasks:
   - name: create empty list for collection of backend servers
     set_fact:
