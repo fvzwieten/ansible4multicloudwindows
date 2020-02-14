@@ -82,7 +82,7 @@
       instance_type: t2.micro
       image: "ami-0182e552fba672768"
       region: "{{ aws_region }}"
-      group: "ansible, {{ role }}"
+      group: "ansible,{{ role }}"
       wait: true
       instance_tags:
         Name: "{{ vm_name }}"
