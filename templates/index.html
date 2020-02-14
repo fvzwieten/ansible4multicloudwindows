@@ -64,8 +64,9 @@
         console.log(setContrast(rgb));
         document.body.style.color = setContrast(rgb);
     </script>
-    <div class="text">This web app is brought to you by IIS on Windows and deployed using Ansible.</div>
-    <div class="text">Your public ip is: {{ ansible_ssh_host }}</div>
+    <div class="text">This web app is brought to you by IIS on Windows</div>
+    <div class="text">Deployed using Red Hat Ansible Tower</div>
+    <div class="text">My public ip is: {{ ansible_ssh_host }}</div>
 </body>
 
 <script>
