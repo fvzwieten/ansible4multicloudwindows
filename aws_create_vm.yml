@@ -38,10 +38,10 @@
       name: "{{ vm_name }}"
     register: ec2key
     
-  - name: Set up Security Group
+  - name: Set up General Security Group
     ec2_group:
-      name: "mysecgrp"
-      description: sg with rule descriptions
+      name: "ansible"
+      description: General rules
       aws_access_key: "{{ aws_access_key_id }}"
       aws_secret_key: "{{ aws_secret_access_key }}"
       region: "{{ aws_region }}"
@@ -61,7 +61,23 @@
         - "{{ role_ports }}"
         cidr_ip: 0.0.0.0/0
         rule_desc: allow all on "{{ role }}"
- 
+
+  - name: Set up Webserver Security Group
+    ec2_group:
+      name: "webserver"
+      description: Webserver rules
+      aws_access_key: "{{ aws_access_key_id }}"
+      aws_secret_key: "{{ aws_secret_access_key }}"
+      region: "{{ aws_region }}"
+      rules:
+      - proto: tcp
+        ports: 
+        - 80
+        - 443
+        cidr_ip: 0.0.0.0/0
+        rule_desc: allow all on http(s)"
+    when: role=="webserver"
+
   - name: Provision an instance
     ec2:
       aws_access_key: "{{ aws_access_key_id }}"
@@ -71,7 +87,7 @@
       instance_type: t2.micro
       image: "ami-0182e552fba672768"
       region: "{{ aws_region }}"
-      group: "mysecgrp"
+      group: "ansible, {{ role }}"
       wait: true
       instance_tags:
         Name: "{{ vm_name }}"
