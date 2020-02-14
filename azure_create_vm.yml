@@ -104,7 +104,7 @@
     azure_rm_virtualmachineextension:
       name: winrm-extension
       resource_group: '{{ azure_resource_group }}'
-      virtual_machine_name: '{{ vm_name }}'
+      virtual_machine_name: 'azure-{{ vm_name }}'
       publisher: Microsoft.Compute
       virtual_machine_extension_type: CustomScriptExtension
       type_handler_version: "1.9"
@@ -120,9 +120,9 @@
   - name: Get Public IP
     azure_rm_publicipaddress_facts:
       resource_group: '{{ azure_resource_group }}'
-      name: '{{ vm_name }}01'
+      name: 'azure-{{ vm_name }}01'
     register: azure_ip
 
   - name: Report endpoints
     debug:
-      msg: "VM name: {{ vm_name }} Role: {{ role }} Public IP: {{ azure_ip.ansible_facts.azure_publicipaddresses[0].properties.ipAddress }}"
+      msg: "VM name: azure-{{ vm_name }} Role: {{ role }} Public IP: {{ azure_ip.ansible_facts.azure_publicipaddresses[0].properties.ipAddress }}"
