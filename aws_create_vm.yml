@@ -78,7 +78,7 @@
       aws_access_key: "{{ aws_access_key_id }}"
       aws_secret_key: "{{ aws_secret_access_key }}"
       key_name: "{{ vm_name }}"
-      id: "{{ vm_name }}"
+      id: "aws-{{ vm_name }}"
       instance_type: t2.micro
       image: "ami-0182e552fba672768"
       region: "{{ aws_region }}"
@@ -144,5 +144,5 @@
   # Use a debug statement to report on stuff in the logging
   - name: Report endpoints
     debug:
-      msg: "VM name: aws_{{ vm_name }} Role: {{ role }} Public IP: {{ public_ip }}"
+      msg: "VM name: aws-{{ vm_name }} Role: {{ role }} Public IP: {{ public_ip }}"
 
