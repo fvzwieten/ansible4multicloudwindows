@@ -89,7 +89,7 @@
         publisher: '{{ arm_publisher }}'
         sku: '{{ arm_sku }}'
         version: 'latest'
-      name: 'azure_{{ vm_name }}'
+      name: 'azure-{{ vm_name }}'
       resource_group: '{{ azure_resource_group }}'
       state: present
       vm_size: '{{ arm_size }}'
