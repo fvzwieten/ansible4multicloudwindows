@@ -1,6 +1,6 @@
 ---
 - name: create loadbalancer setup
-  hosts: webservers:loadbalancers
+  hosts: webservers
   vars_files:
     files/winrm_vars
     
@@ -8,18 +8,21 @@
   - name: create empty list for collection of backend servers
     set_fact:
       backend_server_list: []
-    when: "ansible_fqdn == 'loadbalancer.ibm.nontoonyt.com'"
 
   - name: populate loadbalancer list of dictionaries
     set_fact:
         backend_server_list: "{{ backend_server_list + [ {'name': item, 'address': '{{ ansible_ssh_host }}' + ':80'}] }}"
     loop: "{{ groups['webservers'] }}"
-    when: "ansible_fqdn == 'loadbalancer.ibm.nontoonyt.com'"
+
+  - name: store the resulting pool for the next play
+    set_stats:
+      data:
+        pool: "{{ backend_server_list }}"
 
 - name: show backend hosts
   hosts: loadbalancers
   
   tasks:
-  - name: show fact
+  - name: show pool
     debug:
-      var: backend_server_list
+      var: pool
