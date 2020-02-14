@@ -25,7 +25,7 @@
     - include_role:
         name: geerlingguy.haproxy
       vars:
-        haproxy_backend_servers: "{{ pool }}"
+        haproxy_backend_servers: "{{ backend_server_list }}"
 
   post_tasks:
     - name: add cloud servers to pool
