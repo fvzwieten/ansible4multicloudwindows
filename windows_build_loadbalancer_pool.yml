@@ -13,6 +13,10 @@
     set_fact:
         server_list: "{{ server_list + [ {'name': item, 'address': '{{ ansible_ssh_host }}' + ':80'}] }}"
     loop: "{{ groups['webservers'] }}"
+    
+  - name: debug
+    debug:
+      var: server_list
 
   - name: store the resulting pool for the next play
     set_stats:
