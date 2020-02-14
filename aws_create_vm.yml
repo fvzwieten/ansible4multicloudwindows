@@ -57,7 +57,8 @@
         cidr_ip: 0.0.0.0/0
         rule_desc: allow all on RDP
       - proto: tcp
-        ports: "{{ role_ports }}"
+        ports: 
+        - "{{ role_ports }}"
         cidr_ip: 0.0.0.0/0
         rule_desc: allow all on "{{ role }}"
  
