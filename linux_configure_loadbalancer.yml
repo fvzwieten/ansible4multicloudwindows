@@ -11,7 +11,7 @@
 
   - name: populate loadbalancer list of dictionaries
     set_fact:
-        backend_server_list: "{{ backend_server_list + [ {'name': item, 'address': {{ ansible_ssh_host }} + ':80'}] }}"
+        backend_server_list: "{{ backend_server_list + [ {'name': item, 'address': '{{ ansible_ssh_host }}' + ':80'}] }}"
     loop: "{{ groups['webservers'] }}"
       
   - name: show server_list
