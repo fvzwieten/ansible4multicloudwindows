@@ -3,6 +3,9 @@
 - name: Deploy web site 
   hosts: webservers
 
+  vars_files:
+    files/winrm_vars
+
   gather_facts: false
   tasks:
     - name: Download web site to 'C:\inetpub\wwwroot\ansible.html'
