@@ -4,31 +4,22 @@
   vars_files:
     files/winrm_vars
     
-  pre_tasks:
+  tasks:
   - name: create empty list for collection of backend servers
     set_fact:
       backend_server_list: []
+    when: "ansible_fqdn == 'loadbalancer.ibm.nontoonyt.com'"
 
   - name: populate loadbalancer list of dictionaries
     set_fact:
         backend_server_list: "{{ backend_server_list + [ {'name': item, 'address': '{{ ansible_ssh_host }}' + ':80'}] }}"
     loop: "{{ groups['webservers'] }}"
-    
-  tasks:
-  - include_role:
-      name: geerlingguy.haproxy
-    vars:
-      haproxy_backend_servers: "{{ backend_server_list }}"
     when: "ansible_fqdn == 'loadbalancer.ibm.nontoonyt.com'"
 
-  post_tasks:
-  - name: add cloud servers to pool
-    haproxy:
-      state: enabled
-      host: " {{ ansible_host }}"
-      socket: /var/lib/haproxy/stats
-      weight: 10
-      backend: habackend
-    delegate_to: loadbalancer.ibm.nontoonyt.com
-    when: "ansible_fqdn != 'loadbalancer.ibm.nontoonyt.com'"  
- 
+- name: show backend hosts
+  hosts: loadbalancers
+  
+  tasks:
+  - name: show fact
+    debug:
+      var: backend_server_list
