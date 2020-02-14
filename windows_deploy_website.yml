@@ -12,3 +12,7 @@
       win_template:
         src: "index.html"
         dest: 'C:\inetpub\wwwroot\index.html'
+        
+     - name: output website address
+       debug:
+         msg: "Website online at {{ ansible_ssh_host }}"
