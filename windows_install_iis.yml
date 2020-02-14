@@ -4,6 +4,9 @@
 - name: Install IIS
   hosts: webservers
   gather_facts: false
+  vars_files:
+    files/winrm_vars
+
   tasks:
     - name: Install IIS
       win_feature:
