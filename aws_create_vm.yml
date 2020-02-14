@@ -144,5 +144,5 @@
   # Use a debug statement to report on stuff in the logging
   - name: Report endpoints
     debug:
-      msg: "VM name: {{ vm_name }} Role: {{ role }} Public IP: {{ public_ip }}"
+      msg: "VM name: aws_{{ vm_name }} Role: {{ role }} Public IP: {{ public_ip }}"
 
