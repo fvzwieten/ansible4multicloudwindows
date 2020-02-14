@@ -1,8 +1,37 @@
 ---
-- name: show backend hosts
+- name: create loadbalancer setup
   hosts: loadbalancers
-  
+  remote_user: ansible
+  become: yes
+  vars:
+    haproxy_backend_name: 'habackend'
+    haproxy_backend_mode: 'http'
+    haproxy_backend_balance_method: 'roundrobin'
+    haproxy_backend_httpchk: 'HEAD / HTTP/1.1\r\nHost:localhost'
+
+    haproxy_frontend_name: 'hafrontend'
+    haproxy_frontend_bind_address: '*'
+    haproxy_frontend_port: 80
+    haproxy_frontend_mode: 'http'
+
+    haproxy_stats_enable: true
+    haproxy_stats_port: 8080
+    haproxy_stats_refresh: 15s
+    haproxy_stats_username: 'admin'
+    haproxy_stats_password: 'okboomer'
+    haproxy_stats_uri: /stats
+
   tasks:
-  - name: show pool
-    debug:
-      var: pool
+    - include_role:
+        name: geerlingguy.haproxy
+      vars:
+        haproxy_backend_servers: "{{ pool }}"
+
+  post_tasks:
+    - name: add cloud servers to pool
+      haproxy:
+        state: enabled
+        host: " {{ ansible_host }}"
+        socket: /var/lib/haproxy/stats
+        weight: 10
+        backend: habackend
