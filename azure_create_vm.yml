@@ -20,7 +20,8 @@
 
 # ============================================================= PLAY =====================================================
 # switch to connection local to do Azure stuff
-# 
+#
+
 - name: Azure Create VM
   hosts: localhost
   connection: local
