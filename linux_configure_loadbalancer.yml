@@ -1,6 +1,6 @@
 ---
 - name: create loadbalancer setup
-  hosts: all
+  hosts: loadbalancers:webservers
   remote_user: ansible
   become: yes
   vars:
@@ -22,9 +22,9 @@
     haproxy_stats_uri: /stats
 
   pre_tasks:
-    - name: create webserver and loadbalancer group
-      group_by:
-          key: server_role_{{ ansible_local['facts']['server_role'] }}
+    #- name: create webserver and loadbalancer group
+    #  group_by:
+    #      key: server_role_{{ ansible_local['facts']['server_role'] }}
 
     - name: create empty list for collection of backend servers
       set_fact:
@@ -33,7 +33,11 @@
     - name: populate loadbalancer list of dictionaries
       set_fact:
           backend_server_list: "{{ backend_server_list + [ {'name': item, 'address': hostvars[item]['ansible_local']['facts']['external_ip'] + ':80'}] }}"
-      loop: "{{ query('inventory_hostnames', 'server_role_webserver:!server_role_loadbalancer') }}"
+      loop: "{{ query('inventory_hostnames', 'webservers:!loadbalancers') }}"
+      
+    - name: show server_list
+      debug:
+        var: backend_server_list
 
   tasks:
     - include_role:
