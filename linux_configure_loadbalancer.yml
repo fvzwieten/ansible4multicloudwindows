@@ -13,8 +13,8 @@
     #set_fact:
     #    backend_server_list: "{{ backend_server_list + [ {'name': item, 'address': hostvars[item]['ansible_ssh_host'] + ':80'}] }}"
     debug:
-      var: hostvars[item]
-    loop: "{{ groups['webservers'] }}"
+      var: ansible_ssh_host
+    #loop: "{{ groups['webservers'] }}"
       
   - name: show server_list
     debug:
