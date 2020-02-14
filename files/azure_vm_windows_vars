@@ -3,5 +3,6 @@
 arm_offer: "WindowsServer"
 arm_publisher: "MicrosoftWindowsServer"
 arm_sku: "2016-Datacenter"
-arm_size: "Standard_DS2_v2"
+#arm_size: "Standard_DS2_v2"
+arm_size: "Standard_D4s_v3"
 arm_ports: "3389,5986"
