@@ -2,11 +2,11 @@
 # This playbook uses the win_get_url module to download a simple HTML file for IIS
 - name: Deploy web site 
   hosts: webservers
+  gather_facts: true
 
   vars_files:
     files/winrm_vars
 
-  gather_facts: false
   tasks:
     - name: Download web site to 'C:\inetpub\wwwroot\ansible.html'
       win_template:
