@@ -23,7 +23,7 @@
 
 - name: aws_create_vm
   hosts: localhost
-  #connection: local
+  connection: local
   gather_facts: no
   vars_files:
   - files/aws_vars
